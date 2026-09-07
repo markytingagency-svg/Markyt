@@ -1,22 +1,51 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Sparkles, ArrowRight, PhoneCall, CheckCircle2, Mail } from 'lucide-react';
+import { Sparkles, ArrowRight, PhoneCall, CheckCircle2, Mail, ArrowUpRight } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { MARKYT_CONTACT } from '../data/content';
+import { WhatsAppIcon } from './WhatsAppIcon';
+import { buildQuickBlueprintWhatsAppUrl, saveInquiryLocally } from '../utils/whatsapp';
 
 export const InteractiveTestBuilder: React.FC = () => {
   const [businessName, setBusinessName] = useState('');
   const [industry, setIndustry] = useState('Local Service / Repair');
   const [goal, setGoal] = useState('High-intent Qualified Leads');
+  const [contact, setContact] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [whatsappUrl, setWhatsappUrl] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const url = buildQuickBlueprintWhatsAppUrl({
+      businessName,
+      industry,
+      goal,
+      contact,
+    });
+    setWhatsappUrl(url);
+
+    // Persist locally so answers are never lost
+    saveInquiryLocally({
+      businessName,
+      industry,
+      goal,
+      contact,
+      source: 'Quick Intake Blueprint',
+    });
+
     setSubmitted(true);
+
     try {
       confetti({ particleCount: 70, spread: 50, origin: { y: 0.7 } });
     } catch {
       // ignore
+    }
+
+    // Automatically open WhatsApp in new tab
+    try {
+      window.open(url, '_blank');
+    } catch {
+      // ignore pop-up block; user has button on screen
     }
   };
 
@@ -159,6 +188,19 @@ export const InteractiveTestBuilder: React.FC = () => {
                   </select>
                 </div>
 
+                <div>
+                  <label className="block text-xs font-bold uppercase text-slate-700 mb-1.5">
+                    Your WhatsApp Number or Email (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={contact}
+                    onChange={(e) => setContact(e.target.value)}
+                    placeholder="e.g. 98765 43210 or founder@company.com"
+                    className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-emerald-500 focus:bg-white transition-colors"
+                  />
+                </div>
+
                 <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 flex items-center justify-between text-xs">
                   <span className="text-slate-600 font-semibold">Test Ad Budget Cap:</span>
                   <strong className="text-emerald-800 text-sm font-black font-heading">₹5,000 / 30 Days</strong>
@@ -166,30 +208,54 @@ export const InteractiveTestBuilder: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-4 px-5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-heading font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition-all hover:scale-[1.02] active:scale-[0.98] group cursor-pointer"
+                  className="w-full py-4 px-5 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-heading font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/25 transition-all hover:scale-[1.02] active:scale-[0.98] group cursor-pointer"
                 >
-                  <Sparkles className="w-4 h-4 text-emerald-200" />
-                  <span>Submit Strategy Request</span>
+                  <WhatsAppIcon className="w-4 h-4" />
+                  <span>Send Blueprint to WhatsApp</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
+                <p className="text-[11px] text-slate-500 text-center font-medium">
+                  Pre-fills your exact business answers directly to our WhatsApp (+91 70456 02440).
+                </p>
               </form>
             ) : (
-              <div className="text-center py-8 space-y-4">
+              <div className="text-center py-6 space-y-4">
                 <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto shadow-xs">
                   <CheckCircle2 className="w-7 h-7" />
                 </div>
                 <h4 className="text-xl font-heading font-black text-slate-950">
-                  Strategy Request Initiated
+                  Blueprint Formatted for WhatsApp!
                 </h4>
                 <p className="text-xs text-slate-600 max-w-sm mx-auto font-medium">
-                  We have received your test campaign details for {businessName}. Our senior strategy director will inspect your business model and contact you directly.
+                  We have prepared your ₹5,000 sprint setup for <strong className="text-slate-900">{businessName}</strong>. Send it now on WhatsApp for instant confirmation.
                 </p>
-                <div className="pt-2">
+
+                {/* Summary Snapshot */}
+                <div className="bg-slate-50 rounded-2xl border border-slate-200 p-3.5 text-left text-xs space-y-1 font-mono text-slate-700 max-w-xs mx-auto">
+                  <div><span className="text-slate-400 font-sans">Brand:</span> <strong>{businessName}</strong></div>
+                  <div><span className="text-slate-400 font-sans">Niche:</span> {industry}</div>
+                  <div><span className="text-slate-400 font-sans">Goal:</span> {goal}</div>
+                  {contact && <div><span className="text-slate-400 font-sans">Contact:</span> {contact}</div>}
+                  <div><span className="text-slate-400 font-sans">Budget:</span> ₹5,000 / 30 Days</div>
+                </div>
+
+                <div className="pt-2 flex flex-col gap-2.5 max-w-xs mx-auto">
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-heading font-bold uppercase tracking-wider shadow-md shadow-[#25D366]/20 transition-all hover:scale-[1.02]"
+                  >
+                    <WhatsAppIcon className="w-4 h-4" />
+                    <span>Open Pre-filled WhatsApp Chat</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
                   <a
                     href={`tel:${MARKYT_CONTACT.phone}`}
-                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-emerald-600 text-white text-xs font-heading font-bold uppercase tracking-wider shadow-md hover:bg-emerald-700 transition-all"
+                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-heading font-bold uppercase tracking-wider transition-all"
                   >
-                    <PhoneCall className="w-4 h-4" /> Call Strategy Line Directly
+                    <PhoneCall className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Call Strategy Line Directly</span>
                   </a>
                 </div>
               </div>

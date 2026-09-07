@@ -3,11 +3,14 @@ import { FunnelStage, ServiceItem, StepProcess, IndustryItem, SheetRow, FAQItem 
 export const MARKYT_CONTACT = {
   phone: '7045602440',
   formattedPhone: '+91 70456 02440',
+  whatsappNumber: '917045602440',
   email: 'markytingagency@gmail.com',
   testBudget: '₹5,000',
   location: 'Mumbai & Remote / Pan-India',
   instagram: 'https://www.instagram.com/markyt_agency?stkn=ajRqNWdmNG1jbG50',
   instagramHandle: '@markyt_agency',
+  youtube: 'https://youtube.com/@markyt_agency?si=uxsp0oG_3ZCJXQfp',
+  youtubeHandle: '@markyt_agency',
 };
 
 export const FUNNEL_STAGES: FunnelStage[] = [

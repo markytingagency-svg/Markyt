@@ -110,14 +110,17 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
-            <div
+            <a
               id="header-top-contact-info"
-              className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/[0.06] border border-white/10 text-xs font-mono text-slate-300 select-text tracking-tight"
+              href={`tel:${MARKYT_CONTACT.phone}`}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.08] hover:bg-white/[0.14] border border-white/10 hover:border-white/25 text-xs font-mono text-slate-200 hover:text-white transition-all duration-200 group cursor-pointer shadow-xs"
+              title={`Click to call ${MARKYT_CONTACT.formattedPhone}`}
+              aria-label={`Call direct line ${MARKYT_CONTACT.formattedPhone}`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" title="Available" />
-              <span className="text-slate-400 text-[11px] uppercase font-sans font-medium tracking-wider">Contact</span>
-              <span className="text-slate-100 font-semibold">{MARKYT_CONTACT.formattedPhone}</span>
-            </div>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse group-hover:scale-125 transition-transform" title="Direct Line Available" />
+              <PhoneCall className="w-3 h-3 text-amber-300 group-hover:scale-110 transition-transform" />
+              <span className="text-slate-300 group-hover:text-white font-semibold tracking-tight">{MARKYT_CONTACT.formattedPhone}</span>
+            </a>
           </div>
         </div>
       </div>

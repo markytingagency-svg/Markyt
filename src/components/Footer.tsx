@@ -130,10 +130,17 @@ export const Footer: React.FC<FooterProps> = ({ onOpenQuestionnaire, onNavigateT
                 <span className="font-semibold">{MARKYT_CONTACT.instagramHandle} (Instagram)</span>
                 <ArrowUpRight className="w-3 h-3 text-slate-400 group-hover:text-slate-950 transition-colors" />
               </a>
-              <div className="flex items-center gap-2">
-                <Youtube className="w-4 h-4 text-emerald-700" />
-                <span>YouTube (Behind-the-scenes teardowns)</span>
-              </div>
+              <a 
+                href={MARKYT_CONTACT.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-slate-700 hover:text-slate-950 group transition-colors"
+                title="Watch MARKYT on YouTube"
+              >
+                <Youtube className="w-4 h-4 text-[#FF0000] group-hover:scale-110 transition-transform" />
+                <span className="font-semibold">{MARKYT_CONTACT.youtubeHandle} (YouTube)</span>
+                <ArrowUpRight className="w-3 h-3 text-slate-400 group-hover:text-slate-950 transition-colors" />
+              </a>
               <div className="pt-2 text-xs text-slate-500">
                 Operating with 5+ years experience per practitioner.
               </div>
